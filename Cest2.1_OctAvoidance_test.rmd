@@ -1,0 +1,37 @@
+---
+title: "Untitled"
+author: "Tia"
+date: "8/27/2021"
+output: html_document
+---
+
+```{r}
+
+library(tidyverse)
+
+oct_avoid <- read_csv("octanol_30pct_avoidance_210827.csv")
+
+```
+```{r}
+oct_avoid %>% glimpse()
+```
+Plotting by Genotype
+```{r}
+oct_avoid %>%
+  ggplot(aes(x = genotype, y = response.time)) +
+  geom_boxplot(aes(fill = genotype)) +
+  geom_point() +
+  labs(title = "Via Genotype") +
+  scale_fill_manual(values = c("green", "grey"))
+
+```
+
+Plotted by Experimenter
+```{r}
+oct_avoid %>%
+  ggplot(aes(x = experimenter, y = response.time)) +
+  geom_boxplot(aes(fill = genotype)) +
+  geom_point() +
+  labs(title = "Via Experiementer") +
+  scale_fill_manual(values = c("blue", "grey"))
+```

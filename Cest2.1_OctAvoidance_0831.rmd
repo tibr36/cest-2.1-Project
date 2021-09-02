@@ -1,0 +1,61 @@
+---
+title: "Cest2.1_OctAvoidance_083121"
+author: "Tia"
+date: "9/1/2021"
+output: html_document
+---
+
+30pct Octanol Avoidance
+
+```{r}
+library(tidyverse)
+
+oct_avoid <- read_csv("octanol_30pct_avoidance_210831.csv")
+
+```
+
+```{r}
+oct_avoid %>% glimpse()
+```
+Plotting by Genotype
+```{R}
+oct_avoid %>%
+  ggplot(aes(x = genotype, y = response.time)) +
+  geom_boxplot() +
+  geom_point(aes(color = genotype)) +
+  labs(title = "Via Genotype") +
+  scale_fill_manual(values = c("green", "grey")) +
+  scale_color_manual(values = c("green", "grey"))
+```
+
+Plotting by Experimenter
+
+```{r}
+oct_avoid %>%
+  ggplot(aes(x = experimenter, y = response.time)) +
+  geom_boxplot(aes(fill = genotype)) +
+  geom_point() +
+  labs(title = "Via Experiementer") +
+  scale_fill_manual(values = c("blue", "grey"))
+```
+
+Calculating Mean
+```{r}
+N2<- c(9.52,2.75,2.16,2.78,5.96,3.71,2.93,5.46,3.09,4.86,3.25,5.24,1.07,4.16,7.58,3.1,4.29,5.2,1.5,3.1,8.8,3.4,11.2,2.6,1.2,10.9,1.7)
+
+mean(N2)
+
+cest2.1<- c(8.6,4.17,5.22,7.1,2.41,3.41,6.32,2.25,3.05,4.37,1.31,2.38,2.75,3.19,4.48,1.7,1.1,0.9,13.6,1.6,8.7,6.6,1.4,1.9,7.2)
+
+mean(cest2.1)
+```
+
+Let's plot the means:
+
+
+```{r}
+oct_avoid %>%
+  ggplot(aes(x = genotype, y = response.time)) +
+  stat_summary(fun.data = "mean_se")
+```
+
