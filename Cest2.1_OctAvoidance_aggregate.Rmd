@@ -1,7 +1,7 @@
 ---
 title: "Cest2.1_OctAvoidance"
 author: "Tia"
-date: "9/1/2021"
+date: "04/05/2021"
 output: 
   html_document:
     code_folding: hide
@@ -23,8 +23,8 @@ merged_data %>%
   geom_boxplot() +
   geom_point(aes(color = genotype)) +
   labs(title = "30% oct avoidance in cest-2.1") +
-  scale_fill_manual(values = c("green", "grey")) +
-  scale_color_manual(values = c("green", "grey"))
+  scale_fill_manual(values = c("green", "grey", "blue")) +
+  scale_color_manual(values = c("green", "grey", "blue"))
   
 ```
 Plot by date
@@ -35,8 +35,8 @@ merged_data %>%
   geom_boxplot() +
   geom_point(aes(color = genotype)) +
   labs(title = "30% oct avoidance in cest-2.1") +
-  scale_fill_manual(values = c("green", "grey")) +
-  scale_color_manual(values = c("green", "grey")) +
+  scale_fill_manual(values = c("green", "grey", "blue")) +
+  scale_color_manual(values = c("green", "grey", "blue")) +
   facet_grid(~date)
 ```
 
@@ -48,8 +48,8 @@ merged_data %>%
   geom_boxplot() +
   geom_point(aes(color = genotype)) +
   labs(title = "30% oct avoidance in cest-2.1") +
-  scale_fill_manual(values = c("green", "grey")) +
-  scale_color_manual(values = c("green", "grey"))
+  scale_fill_manual(values = c("green", "grey", "blue")) +
+  scale_color_manual(values = c("green", "grey", "blue"))
   
 ```
 
@@ -61,9 +61,28 @@ merged_data %>%
   ggplot(aes(x = experimenter, y = response.time)) +
   geom_boxplot(aes(fill = genotype)) +
   labs(title = "Via Experiementer") +
-  scale_fill_manual(values = c("blue", "grey"))
+  scale_fill_manual(values = c("blue", "grey", "blue"))
 ```
-
+Plotting by Genotype Most Recent Experiment Day (04/06/2022)
+```{R}
+subset(merged_data, date== "2022-04-05")%>%
+  ggplot(aes(x = genotype, y = response.time)) +
+  geom_boxplot() +
+  geom_point(aes(color = genotype)) +
+  labs(title = "30% oct avoidance in cest-2.1") +
+  scale_fill_manual(values = c("green", "grey", "blue")) +
+  scale_color_manual(values = c("green", "grey", "blue"))
+  
+```
+Plotting by Experimenter Most Recent Experiment (04/06/2022)
+```{R}
+subset(merged_data, date== "2022-04-05")%>%
+  ggplot(aes(x = experimenter, y = response.time)) +
+  geom_boxplot(aes(fill = genotype)) +
+  labs(title = "Via Experiementer") +
+  scale_fill_manual(values = c("blue", "grey", "blue"))
+  
+```
 
 Let's plot the means:
 
@@ -76,12 +95,5 @@ merged_data %>%
 ```
 
 
-Let's do a simple stat test:
 
-```{r}
-library(magrittr)
-merged_data %>%
-  filter(date != "2021-08-27") %$%
-  t.test(response.time ~ genotype)
-```
 
