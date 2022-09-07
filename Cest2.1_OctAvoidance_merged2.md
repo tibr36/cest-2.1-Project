@@ -14,18 +14,18 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
+## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
 ```
 
 ```
-## v ggplot2 3.3.5     v purrr   0.3.4
-## v tibble  3.1.3     v dplyr   1.0.7
-## v tidyr   1.1.3     v stringr 1.4.0
-## v readr   2.0.0     v forcats 0.5.1
+## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+## ✓ tibble  3.1.6     ✓ dplyr   1.0.7
+## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
+## ✓ readr   2.1.1     ✓ forcats 0.5.1
 ```
 
 ```
-## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ```
@@ -39,7 +39,7 @@ oct_avoid <- read_csv("octanol_avoidance_merged.csv")
 ```
 
 ```
-## -- Column specification --------------------------------------------------------
+## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: ","
 ## chr (4): genotype, odor, experimenter, date
 ## dbl (1): response.time
@@ -47,8 +47,8 @@ oct_avoid <- read_csv("octanol_avoidance_merged.csv")
 
 ```
 ## 
-## i Use `spec()` to retrieve the full column specification for this data.
-## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
 
 
@@ -59,11 +59,11 @@ oct_avoid %>% glimpse()
 ```
 ## Rows: 105
 ## Columns: 5
-## $ genotype      <chr> "N2", "N2", "N2", "N2", "N2", "N2", "N2", "N2", "N2", "N~
-## $ odor          <chr> "30pct_oct", "30pct_oct", "30pct_oct", "30pct_oct", "30p~
-## $ response.time <dbl> 2.1, 3.1, 3.5, 3.2, 3.2, 2.7, 7.0, 13.0, 6.7, 2.2, 2.4, ~
-## $ experimenter  <chr> "MOD", "MOD", "MOD", "MOD", "MOD", "MOD", "MOD", "MOD", ~
-## $ date          <chr> "8/5/2021", "8/5/2021", "8/5/2021", "8/5/2021", "8/5/202~
+## $ genotype      <chr> "N2", "N2", "N2", "N2", "N2", "N2", "N2", "N2", "N2", "N…
+## $ odor          <chr> "30pct_oct", "30pct_oct", "30pct_oct", "30pct_oct", "30p…
+## $ response.time <dbl> 2.1, 3.1, 3.5, 3.2, 3.2, 2.7, 7.0, 13.0, 6.7, 2.2, 2.4, …
+## $ experimenter  <chr> "MOD", "MOD", "MOD", "MOD", "MOD", "MOD", "MOD", "MOD", …
+## $ date          <chr> "8/5/2021", "8/5/2021", "8/5/2021", "8/5/2021", "8/5/202…
 ```
 
 Plotted by Genotype
