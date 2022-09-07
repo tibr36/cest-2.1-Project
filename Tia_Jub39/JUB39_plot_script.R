@@ -1,4 +1,4 @@
-Date: "09/31/2022"
+Date: "0906/2022"
 100% octanol with N2 and cest-2.1 Providencia SOS
 ---
 
@@ -20,3 +20,15 @@ data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
   coord_cartesian( ylim=c(0,10), expand = FALSE) +  
   facet_grid(~Genotype) +
   scale_fill_manual(values = c("blue", "green"))
+
+###### plot (excluding "8-31"") #####
+data %>% 
+  filter(Date != "2021-08-31") %>%
+  ggplot(aes(x = Condition, y = Response_Latency)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+  facet_grid(~Genotype) +
+  scale_fill_manual(values = c("blue","green")) +
+  scale_color_manual(values = c("blue","green"))
+
