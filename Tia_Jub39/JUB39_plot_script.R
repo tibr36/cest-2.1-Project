@@ -1,4 +1,4 @@
-Date: "09/21/2022"
+Date: "09/27/2022"
 100% octanol with N2 and cest-2.1 Providencia SOS
 ---
 
@@ -31,11 +31,11 @@ data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
   scale_color_manual(values = c("blue","green"))
 
 ###### plot (Most recent experiment day) #####
-  subset(data, Date== "2022-09-21")%>%
+  subset(data, Date== "2022-09-27")%>%
   ggplot(aes(x = Condition, y = Response_Latency)) +
   stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
   stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
-  labs(title = "100% SOS with N2 and cest-2.1 on OP50 vs Providencia(2022-09-21)") +
+  labs(title = "100% SOS with N2 and cest-2.1 on OP50 vs Providencia(2022-09-27)") +
   facet_grid(~Genotype) +
   scale_fill_manual(values = c("blue","green")) +
   scale_color_manual(values = c("blue","green"))
