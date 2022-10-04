@@ -28,7 +28,8 @@ data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
   labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
   facet_grid(~Genotype) +
   scale_fill_manual(values = c("blue","green")) +
-  scale_color_manual(values = c("blue","green"))
+  scale_color_manual(values = c("blue","green")) +
+  
 
 ###### plot (Most recent experiment day) #####
   subset(data, Date== "2022-09-27")%>%
@@ -39,4 +40,51 @@ data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
   facet_grid(~Genotype) +
   scale_fill_manual(values = c("blue","green")) +
   scale_color_manual(values = c("blue","green"))
+
+######Plotting by Experimenter
+
+data %>%
+  ggplot(aes(x = Experimenter, y = Response_Latency)) +
+  geom_boxplot(aes(fill = Genotype)) +
+  labs(title = "Via Experiementer") +
+  scale_fill_manual(values = c("blue", "grey", "blue", "red"))
+
+data %>%
+ggplot(aes(x = Experimenter, y = Response_Latency)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  labs(title = "100% SOS with N2 and cest-2.1 on OP50 vs Providencia(2022-09-27)") +
+  facet_grid(~Genotype) +
+  scale_fill_manual(values = c("blue","green", "red", "purple")) +
+  scale_color_manual(values = c("blue","green", "red", "purple))
+  
+  ###### plot (with space between x axis and N2/cest-2.1) #####
+  
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+  facet_grid(~Genotype) +
+  scale_fill_manual(values = c("blue","green")) +
+  scale_color_manual(values = c("blue","green")) +
+  facet_grid(Genotype~Experimenter)
+  
+ subset(data, Date== "2022-09-21")%>%
+  ggplot(aes(x = Condition, y = Response_Latency)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+  facet_grid(~Genotype) +
+  scale_fill_manual(values = c("blue","green")) +
+  scale_color_manual(values = c("blue","green")) +
+  facet_grid(Genotype~Experimenter)
+  
+  data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+  facet_grid(~Genotype) +
+  scale_fill_manual(values = c("blue","green")) +
+  scale_color_manual(values = c("blue","green")) +
+  facet_grid(Date~Experimenter~Genotype)
 
