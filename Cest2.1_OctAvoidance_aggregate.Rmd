@@ -1,7 +1,7 @@
 ---
 title: "Cest2.1_OctAvoidance"
 author: "Tia"
-date: "9/1/2021"
+Date: "04/05/2021"
 output: 
   html_document:
     code_folding: hide
@@ -11,6 +11,8 @@ output:
 
 ```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
+library(ggplot2)
+theme_set(theme_classic())
 files <- fs::dir_ls(recurse = TRUE, glob = "data/octanol_3*.csv")
 merged_data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
 
@@ -19,37 +21,37 @@ merged_data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
 Plotting by Genotype
 ```{R}
 merged_data %>%
-  ggplot(aes(x = genotype, y = response.time)) +
+  ggplot(aes(x = Genotype, y = Response.time)) +
   geom_boxplot() +
-  geom_point(aes(color = genotype)) +
+  geom_point(aes(color = Genotype)) +
   labs(title = "30% oct avoidance in cest-2.1") +
-  scale_fill_manual(values = c("green", "grey")) +
-  scale_color_manual(values = c("green", "grey"))
+  scale_fill_manual(values = c("green", "grey", "blue", "red")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red"))
   
 ```
-Plot by date
+Plot by Date
 
 ```{r}
 merged_data %>%
-  ggplot(aes(x = genotype, y = response.time)) +
+  ggplot(aes(x = Genotype, y = Response.time)) +
   geom_boxplot() +
-  geom_point(aes(color = genotype)) +
+  geom_point(aes(color = Genotype)) +
   labs(title = "30% oct avoidance in cest-2.1") +
-  scale_fill_manual(values = c("green", "grey")) +
-  scale_color_manual(values = c("green", "grey")) +
-  facet_grid(~date)
+  scale_fill_manual(values = c("green", "grey", "blue", "red")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red")) +
+  facet_grid(~Date)
 ```
 
 Plotting by Genotype (excluding 8-27)
 ```{R}
 merged_data %>%
-  filter(date != "2021-08-27") %>%
-  ggplot(aes(x = genotype, y = response.time)) +
+  filter(Date != "2021-08-27") %>%
+  ggplot(aes(x = Genotype, y = Response.time)) +
   geom_boxplot() +
-  geom_point(aes(color = genotype)) +
+  geom_point(aes(color = Genotype)) +
   labs(title = "30% oct avoidance in cest-2.1") +
-  scale_fill_manual(values = c("green", "grey")) +
-  scale_color_manual(values = c("green", "grey"))
+  scale_fill_manual(values = c("green", "grey", "blue", "red")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red"))
   
 ```
 
@@ -57,31 +59,81 @@ Plotting by Experimenter
 
 ```{r}
 merged_data %>%
-  filter(date != "2021-08-27") %>%
-  ggplot(aes(x = experimenter, y = response.time)) +
-  geom_boxplot(aes(fill = genotype)) +
+  filter(Date != "2021-08-27") %>%
+  ggplot(aes(x = Experimenter, y = Response.time)) +
+  geom_boxplot(aes(fill = Genotype)) +
   labs(title = "Via Experiementer") +
-  scale_fill_manual(values = c("blue", "grey"))
+  scale_fill_manual(values = c("blue", "grey", "blue", "red"))
+```
+Plotting by Genotype Most Recent Experiment Day (04/06/2022)
+```{R}
+subset(merged_data, Date== "2022-04-05")%>%
+  ggplot(aes(x = Genotype, y = Response.time)) +
+  geom_boxplot() +
+  geom_point(aes(color = Genotype)) +
+  labs(title = "30% oct avoidance in cest-2.1") +
+  scale_fill_manual(values = c("green", "grey", "blue", "red")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red"))
+  
+```
+Plotting by Experimenter Most Recent Experiment (04/06/2022)
+```{R}
+subset(merged_data, Date== "2022-04-05")%>%
+  ggplot(aes(x = Experimenter, y = Response.time)) +
+  geom_boxplot(aes(fill = Genotype)) +
+  labs(title = "Via Experiementer") +
+  scale_fill_manual(values = c("blue", "grey", "blue", "red"))
+  
 ```
 
+Plotting by N2, TBH, CEST-2.1 
+```{R}
+subset(merged_data, Date== "2022-04-05,2022-05-10,2022-04-27")%>%
+  ggplot(aes(x = Genotype, y = Response.time)) +
+  geom_boxplot() +
+  geom_point(aes(color = Genotype)) +
+  geom_boxplot(aes(fill = Genotype)) +
+  labs(title = "30% Octanol avoidance on OA pathayway") +
+  scale_fill_manual(values = c("green", "grey", "blue", "red")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red"))
+  
+```
+Plotting by N2, TBH, CEST-2.1 
+```{R}
+ data<-data.frame(subset(merged_data, Date== "2022-04-05,2022-05-10,2022-04-27")) 
+
+ ####### anova ####
+ lm(data = data, formula = Response.time ~ Genotype) %>%
+  summary()
+
+  ggplot(data, aes(x=Genotype, y= Response.time, width = 0.75)) +
+  geom_bar(stat="summary", aes(fill = Genotype)) + 
+    
+     scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+    
+    scale_fill_manual(values = c("green", "grey", "blue")) +
+  scale_color_manual(values = c("green", "grey", "blue")) +
+     stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+ 
+     labs(title = "cest-2.1 behavioral 30% SOS Phenotype")
+  
+ 
+```
+
+mutate(genotype = fct_relevel(genotype, "N2")) 
+z stat_summary(geom = "bar", aes(fill = genotype), width = 0.75) +
 
 Let's plot the means:
 
 
 ```{r}
 merged_data %>%
-  filter(date != "2021-08-27") %>%
-  ggplot(aes(x = genotype, y = response.time)) +
+  filter(Date != "2021-08-27") %>%
+  ggplot(aes(x = Genotype, y = Response.time)) +
   stat_summary(fun.data = "mean_se")
 ```
 
 
-Let's do a simple stat test:
 
-```{r}
-library(magrittr)
-merged_data %>%
-  filter(date != "2021-08-27") %$%
-  t.test(response.time ~ genotype)
-```
 
