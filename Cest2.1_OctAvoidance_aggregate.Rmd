@@ -15,6 +15,7 @@ library(ggplot2)
 theme_set(theme_classic())
 files <- fs::dir_ls(recurse = TRUE, glob = "data/octanol_3*.csv")
 merged_data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+library(dplyr)
 
 ```
 
@@ -65,9 +66,10 @@ merged_data %>%
   labs(title = "Via Experiementer") +
   scale_fill_manual(values = c("blue", "grey", "blue", "red"))
 ```
+
 Plotting by Genotype Most Recent Experiment Day (04/06/2022)
 ```{R}
-subset(merged_data, Date== "2022-04-05")%>%
+subset(merged_data, Date== "2022-10-13")%>%
   ggplot(aes(x = Genotype, y = Response.time)) +
   geom_boxplot() +
   geom_point(aes(color = Genotype)) +
@@ -76,9 +78,10 @@ subset(merged_data, Date== "2022-04-05")%>%
   scale_color_manual(values = c("green", "grey", "blue", "red"))
   
 ```
-Plotting by Experimenter Most Recent Experiment (04/06/2022)
+
+Plotting by Experimenter Most Recent Experiment (12/14/2022)
 ```{R}
-subset(merged_data, Date== "2022-04-05")%>%
+subset(merged_data, Date== "2022-12-14")%>%
   ggplot(aes(x = Experimenter, y = Response.time)) +
   geom_boxplot(aes(fill = Genotype)) +
   labs(title = "Via Experiementer") +
@@ -133,6 +136,55 @@ merged_data %>%
   ggplot(aes(x = Genotype, y = Response.time)) +
   stat_summary(fun.data = "mean_se")
 ```
+
+
+```{r}
+  merged_data%>%
+  filter(between(Date, as.Date('2021-08-05'), as.Date ('2021-09-07')))%>%
+  ggplot(aes(x = Genotype, y = Response.time)) +
+  geom_boxplot() +
+  geom_point(aes(color = Genotype)) +
+  labs(title = "30% oct avoidance in cest-2.1") +
+  scale_fill_manual(values = c("green", "grey", "blue", "red")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red")) +
+   facet_grid(~Date)
+```
+```{r}
+  merged_data%>%
+  filter(between(Date, as.Date('2021-09-29'), as.Date ('2022-03-25')))%>%
+  ggplot(aes(x = Genotype, y = Response.time)) +
+  geom_boxplot() +
+  geom_point(aes(color = Genotype)) +
+  labs(title = "30% oct avoidance in cest-2.1") +
+  scale_fill_manual(values = c("green", "grey", "blue", "red")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red")) +
+   facet_grid(~Date)
+```
+
+
+```{r}
+  merged_data%>%
+  filter(between(Date, as.Date('2022-04-05'), as.Date ('2022-10-13')))%>%
+  ggplot(aes(x = Genotype, y = Response.time)) +
+  geom_boxplot() +
+  geom_point(aes(color = Genotype)) +
+  labs(title = "30% oct avoidance in cest-2.1") +
+  scale_fill_manual(values = c("green", "grey", "blue", "red")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red")) +
+   facet_grid(~Date)
+```
+```{r}
+  subset(merged_data, Date== "2023-02-02")%>%
+  ggplot(aes(x = Genotype, y = Response.time)) +
+  geom_boxplot() +
+  geom_point(aes(color = Genotype)) +
+  labs(title = "Dilute 30% octanol SOS on 2023-02-02") +
+  scale_fill_manual(values = c("green", "grey", "blue", "red")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red"))
+```
+
+
+
 
 
 

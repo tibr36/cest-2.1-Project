@@ -32,11 +32,11 @@ data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
   
 
 ###### plot (Most recent experiment day) #####
-  subset(data, Date== "2022-09-27")%>%
+  subset(data, Date== "2022-10-13")%>%
   ggplot(aes(x = Condition, y = Response_Latency)) +
   stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
   stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
-  labs(title = "100% SOS with N2 and cest-2.1 on OP50 vs Providencia") +
+  labs(title = "100% SOS with N2 and cest-2.1 on OP50 vs Providencia 10/13 TB") +
   facet_grid(~Genotype) +
   scale_fill_manual(values = c("blue","green")) +
   scale_color_manual(values = c("blue","green"))
@@ -56,9 +56,9 @@ ggplot(aes(x = Experimenter, y = Response_Latency)) +
   labs(title = "100% SOS with N2 and cest-2.1 on OP50 vs Providencia(2022-09-27)") +
   facet_grid(~Genotype) +
   scale_fill_manual(values = c("blue","green", "red", "purple")) +
-  scale_color_manual(values = c("blue","green", "red", "purple))
+  scale_color_manual(values = c("blue","green", "red", "purple"))
   
-  ###### plot (with space between x axis and N2/cest-2.1) #####
+###### plot (with space between x axis and N2/cest-2.1) #####
   
 data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
   stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
@@ -69,7 +69,7 @@ data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
   scale_color_manual(values = c("blue","green")) +
   facet_grid(Genotype~Experimenter)
   
- subset(data, Date== "2022-10-04")%>%
+ subset(data, Date== "2022-10-13")%>%
   ggplot(aes(x = Condition, y = Response_Latency)) +
   stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
   stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
