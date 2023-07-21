@@ -1,0 +1,512 @@
+####### select a file in the data folder ####
+files <- fs::dir_ls(dirname(file.choose()))
+readfun <- function(x) { read_delim(x) %>%
+pivot_longer(cols = c(1:4), names_to = "genotype", values_to = "time")}
+data <- map_df(files, readfun, .id = "path")
+####### reorder variables ####
+data <- data %>%
+mutate(path = basename(path)) %>%
+separate(path, into = c("date", "name"), sep = "_") %>%
+separate(genotype, into = c("genotype", "food"), sep = c("_"," "))
+####### exclude 5-19 date ####
+data <- data %>% filter(date != "5-19") %>%
+mutate(food = fct_level(food, "OP50"),
+genotype = fct_relevel(genotype, "N2"))
+####### anova ####
+lm(data = data, formula = time ~ genotype*food) %>%
+summary()
+###### plot #####
+ggplot(data, aes(x = food, y = time)) +
+stat_summary(geom = "bar", aes(fill = genotype), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+facet_grid(~genotype) +
+scale_fill_manual(values = c("grey", "black"))
+library(tidyverse)
+theme_set(theme_classic())
+####### select a file in the data folder ####
+files <- fs::dir_ls(dirname(file.choose()))
+readfun <- function(x) { read_delim(x) %>%
+pivot_longer(cols = c(1:4), names_to = "genotype", values_to = "time")}
+data <- map_df(files, readfun, .id = "path")
+####### reorder variables ####
+data <- data %>%
+mutate(path = basename(path)) %>%
+separate(path, into = c("date", "name"), sep = "_") %>%
+separate(genotype, into = c("genotype", "food"), sep = c("_"," "))
+####### exclude 5-19 date ####
+data <- data %>% filter(date != "5-19") %>%
+mutate(food = fct_level(food, "OP50"),
+genotype = fct_relevel(genotype, "N2"))
+####### anova ####
+lm(data = data, formula = time ~ genotype*food) %>%
+summary()
+setwd("~/Documents/git/cest-2.1-Project/Tia_Jub39")
+library(tidyverse)
+library(ggplot2)
+theme_set(theme_classic())
+####### select a file in the data folder ####
+files <- fs::dir_ls(recurse = TRUE, glob = "Tia_Jub39/2022-08-31_cest-2.1*.csv")
+data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+####### anova ####
+lm(data = data, formula = Response_Latency ~ Genotype*Condition) %>%
+summary()
+setwd("~/Documents/git/cest-2.1-Project")
+library(tidyverse)
+library(ggplot2)
+theme_set(theme_classic())
+####### select a file in the data folder ####
+files <- fs::dir_ls(recurse = TRUE, glob = "Tia_Jub39/2022-08-31_cest-2.1*.csv")
+data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+####### anova ####
+lm(data = data, formula = Response_Latency ~ Genotype*Condition) %>%
+summary()
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,10), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+library(tidyverse)
+library(ggplot2)
+theme_set(theme_classic())
+####### select a file in the data folder ####
+files <- fs::dir_ls(recurse = TRUE, glob = "Tia_Jub39/2022-08-31_cest-2.1*.csv")
+data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+####### anova ####
+lm(data = data, formula = Response_Latency ~ Genotype*Condition) %>%
+summary()
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,10), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,12), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,15), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,10), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+data %>%
+filter(Date != "2021-08-31") %>%
+ggplot(aes(x = Genotype, y = Response.time)) +
+geom_boxplot() +
+geom_point(aes(color = Genotype)) +
+labs(title = "100% octanol with N2 and cest-2.1 Providencia SOS") +
+scale_fill_manual(values = c("green", "grey", "blue", "red")) +
+scale_color_manual(values = c("green", "grey", "blue", "red"))
+data %>%
+filter(Date != "2021-08-31") %>%
+ggplot(aes(x = Genotype, y = Response_Latency)) +
+geom_boxplot() +
+geom_point(aes(color = Genotype)) +
+labs(title = "100% octanol with N2 and cest-2.1 Providencia SOS") +
+scale_fill_manual(values = c("green", "grey", "blue", "red")) +
+scale_color_manual(values = c("green", "grey", "blue", "red"))
+data %>%
+filter(Date != "2021-08-31") %>%
+ggplot(aes(x = Genotype, y = Response_Latency)) +
+geom_boxplot(aes(fill = Genotype) +
+geom_point(aes(color = Genotype)) +
+labs(title = "100% octanol with N2 and cest-2.1 Providencia SOS") +
+scale_fill_manual(values = c("green", "grey", "blue", "red")) +
+scale_color_manual(values = c("green", "grey", "blue", "red"))
+data %>%
+data %>%
+filter(Date != "2021-08-31") %>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75)
+geom_boxplot(aes(fill = Genotype)) +
+geom_point(aes(color = Genotype)) +
+labs(title = "100% octanol with N2 and cest-2.1 Providencia SOS") +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+data %>%
+filter(Date != "2021-08-31") %>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75)
+geom_point(aes(color = Genotype)) +
+labs(title = "100% octanol with N2 and cest-2.1 Providencia SOS") +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+data %>%
+filter(Date != "2021-08-31") %>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+labs(title = "100% octanol with N2 and cest-2.1 Providencia SOS") +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+data %>%
+filter(Date != "2021-08-31") %>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+labs(title = "100% octanol with N2 and cest-2.1 Providencia SOS") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+data %>%
+filter(Date != "2021-08-31") %>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+facet_grid(~Genotype) +
+scale_color_manual(values = c("blue","green"))
+data %>%
+filter(Date != "2021-08-31") %>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype), width = 0.75) +
+labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+facet_grid(~Genotype) +
+scale_color_manual(values = c("blue","green"))
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,10), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,10), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+###### plot (excluding "8-31"") #####
+data %>%
+filter(Date != "2021-08-31") %>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+library(tidyverse)
+library(ggplot2)
+theme_set(theme_classic())
+####### select a file in the data folder ####
+files <- fs::dir_ls(recurse = TRUE, glob = "Tia_Jub39/2022-08-31_cest-2.1*.csv")
+data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+####### anova ####
+lm(data = data, formula = Response_Latency ~ Genotype*Condition) %>%
+summary()
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,10), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+###### plot (excluding "8-31"") #####
+data %>%
+filter(Date != "2021-08-31") %>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,10), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+library(tidyverse)
+library(ggplot2)
+theme_set(theme_classic())
+####### select a file in the data folder ####
+files <- fs::dir_ls(recurse = TRUE, glob = "Tia_Jub39/2022-08-31_cest-2.1*.csv")
+data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+####### anova ####
+lm(data = data, formula = Response_Latency ~ Genotype*Condition) %>%
+summary()
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,10), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+###### plot (excluding "8-31"") #####
+data %>%
+filter(Date != "2021-08-31") %>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+library(tidyverse)
+library(ggplot2)
+theme_set(theme_classic())
+####### select a file in the data folder ####
+files <- fs::dir_ls(recurse = TRUE, glob = "Tia_Jub39/2022-08-31_cest-2.1*.csv")
+data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+####### anova ####
+lm(data = data, formula = Response_Latency ~ Genotype*Condition) %>%
+summary()
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,10), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+###### plot (excluding "8-31"") #####
+data %>%
+filter(Date != "2021-08-31") %>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,10), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+library(tidyverse)
+library(ggplot2)
+theme_set(theme_classic())
+####### select a file in the data folder ####
+files <- fs::dir_ls(recurse = TRUE, glob = "Tia_Jub39/2022-08-31_cest-2.1*.csv")
+data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+####### anova ####
+lm(data = data, formula = Response_Latency ~ Genotype*Condition) %>%
+summary()
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,10), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+library(tidyverse)
+library(ggplot2)
+theme_set(theme_classic())
+####### select a file in the data folder ####
+files <- fs::dir_ls(recurse = TRUE, glob = "Tia_Jub39/2022-08-31_cest-2.1*.csv")
+data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+####### anova ####
+lm(data = data, formula = Response_Latency ~ Genotype*Condition) %>%
+summary()
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,10), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+###### plot (excluding "8-31"") #####
+subset(merged_data, Date== "2022-04-05")%>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+###### plot (excluding "8-31"") #####
+subset(data, Date== "2022-09-14")%>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+library(tidyverse)
+library(ggplot2)
+theme_set(theme_classic())
+####### select a file in the data folder ####
+files <- fs::dir_ls(recurse = TRUE, glob = "Tia_Jub39/2022-08-31_cest-2.1*.csv")
+data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+####### anova ####
+lm(data = data, formula = Response_Latency ~ Genotype*Condition) %>%
+summary()
+###### plot (excluding "8-31"") #####
+subset(data, Date== "2022-09-14")%>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+library(tidyverse)
+library(ggplot2)
+theme_set(theme_classic())
+####### select a file in the data folder ####
+files <- fs::dir_ls(recurse = TRUE, glob = "Tia_Jub39/2022-08-31_cest-2.1*.csv")
+data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+####### anova ####
+lm(data = data, formula = Response_Latency ~ Genotype*Condition) %>%
+summary()
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,10), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+###### plot (excluding "8-31"") #####
+data %>%
+filter(Date != "2021-08-31") %>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+subset(data, Date== "2022-09-21")%>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+library(tidyverse)
+library(ggplot2)
+theme_set(theme_classic())
+####### select a file in the data folder ####
+files <- fs::dir_ls(recurse = TRUE, glob = "Tia_Jub39/2022-08-31_cest-2.1*.csv")
+data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+####### anova ####
+lm(data = data, formula = Response_Latency ~ Genotype*Condition) %>%
+summary()
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,10), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+###### plot (excluding "8-31"") #####
+data %>%
+filter(Date != "2021-08-31") %>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+###### plot (excluding "8-31"") #####
+subset(data, Date== "2022-09-21")%>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+###### plot (Most recent experiment day) #####
+subset(data, Date== "2022-09-21")%>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+labs(title = "100% SOS with N2 and cest-2.1 on OP50 vs Providencia(2022-09-21)") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+###### plot (excluding "8-31"") #####
+data %>%
+filter(Date != "2021-08-31") %>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,10), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+###### plot (excluding "8-31"") #####
+data %>%
+filter(Date != "2021-08-31") %>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,10), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+library(tidyverse)
+library(ggplot2)
+theme_set(theme_classic())
+####### select a file in the data folder ####
+files <- fs::dir_ls(recurse = TRUE, glob = "Tia_Jub39/2022-08-31_cest-2.1*.csv")
+data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+####### anova ####
+lm(data = data, formula = Response_Latency ~ Genotype*Condition) %>%
+summary()
+###### plot #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+coord_cartesian( ylim=c(0,10), expand = FALSE) +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue", "green"))
+###### plot (with space between x axis and N2/cest-2.1) #####
+data %>% ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+###### plot (Most recent experiment day) #####
+subset(data, Date== "2022-09-21")%>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+labs(title = "100% SOS with N2 and cest-2.1 on OP50 vs Providencia(2022-09-21)") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
+###### plot (Most recent experiment day) #####
+subset(data, Date== "2022-09-21")%>%
+ggplot(aes(x = Condition, y = Response_Latency)) +
+stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+labs(title = "100% SOS with N2 and cest-2.1 on OP50 vs Providencia(2022-09-21)") +
+facet_grid(~Genotype) +
+scale_fill_manual(values = c("blue","green")) +
+scale_color_manual(values = c("blue","green"))
