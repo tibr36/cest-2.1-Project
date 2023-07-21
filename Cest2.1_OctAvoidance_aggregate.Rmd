@@ -1,7 +1,7 @@
 ---
 title: "Cest2.1_OctAvoidance"
-author: "Tia"
-Date: "05/24/2023"
+author: "TB"
+Date: "2021-2023"
 output: 
   html_document:
     code_folding: hide
@@ -12,6 +12,7 @@ output:
 ```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(ggplot2)
+library(ggtext)
 theme_set(theme_classic())
 files <- fs::dir_ls(recurse = TRUE, glob = "data/octanol_3*.csv")
 merged_data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
@@ -26,8 +27,8 @@ merged_data %>%
   geom_boxplot() +
   geom_point(aes(color = Genotype)) +
   labs(title = "30% oct avoidance in cest-2.1") +
-  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple", "orange")) +
-  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange"))
+  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black"))
   
 ```
 Plot by Date
@@ -38,9 +39,9 @@ merged_data %>%
   geom_boxplot() +
   geom_point(aes(color = Genotype)) +
   labs(title = "30% oct avoidance in cest-2.1") +
-  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple","orange")) +
-  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange")) +
-  facet_grid(~Date)
+  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple","orange", "black")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black")) +
+  facet_grid(~Genotype)
 ```
 
 Plotting by Genotype (excluding 8-27)
@@ -51,8 +52,8 @@ merged_data %>%
   geom_boxplot() +
   geom_point(aes(color = Genotype)) +
   labs(title = "30% oct avoidance in cest-2.1") +
-  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange")) +
-  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange"))
+  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black"))
   
 ```
 
@@ -64,41 +65,41 @@ merged_data %>%
   ggplot(aes(x = Experimenter, y = Response.time)) +
   geom_boxplot(aes(fill = Genotype)) +
   labs(title = "Via Experiementer") +
-  scale_fill_manual(values = c("blue", "grey", "blue", "red","purple", "orange"))
+  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black"))
 ```
 
-Plotting by Genotype Most Recent Experiment Day (05/24/2023)
+Plotting by Genotype Most Recent Experiment Day (6/29/2023)
 ```{R}
-subset(merged_data, Date== "2023-05-24")%>%
+subset(merged_data, Date== "2023-06-29")%>%
   ggplot(aes(x = Genotype, y = Response.time)) +
   geom_boxplot() +
   geom_point(aes(color = Genotype)) +
   labs(title = "30% oct avoidance in cest-2.1") +
-  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple", "orange")) +
-  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange"))
+  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black"))
   
 ```
 
 Plotting by Experimenter Most Recent Experiment (05/24/2023)
 ```{R}
-subset(merged_data, Date== "2023-05-24")%>%
+subset(merged_data, Date== "2023-06-")%>%
   ggplot(aes(x = Experimenter, y = Response.time)) +
   geom_boxplot(aes(fill = Genotype)) +
   labs(title = "Via Experiementer") +
-  scale_fill_manual(values = c("blue", "grey", "blue", "red","purple", "orange"))
+  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black"))
   
 ```
 
 Plotting by N2, TBH, CEST-2.1, GLO-1
 ```{R}
-subset(merged_data, Date== "2023-05-08,2023-05-09,2023-05-10")%>%
+subset(merged_data, Date== "2023-06-19,2023-06-22,2023-06-23,2023-06-26,2023-06-29")%>%
   ggplot(aes(x = Genotype, y = Response.time)) +
   geom_boxplot() +
   geom_point(aes(color = Genotype)) +
   geom_boxplot(aes(fill = Genotype)) +
   labs(title = "30% Octanol avoidance on OA pathayway") +
-  scale_fill_manual(values = c("green", "grey", "blue", "red","purple")) +
-  scale_color_manual(values = c("green", "grey", "blue", "red", "purple"))
+  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black"))
   
 ```
 Plotting by N2, TBH, CEST-2.1 
@@ -139,42 +140,40 @@ merged_data %>%
 
 Plotting by Date Ranges
 ```{r}
-  merged_data%>%
-  filter(between(Date, as.Date('2021-08-05'), as.Date ('2021-09-07')))%>%
+  subset(merged_data, Date== "2023-06-29")%>%
   ggplot(aes(x = Genotype, y = Response.time)) +
   geom_boxplot() +
   geom_point(aes(color = Genotype)) +
   labs(title = "30% oct avoidance in cest-2.1") +
-  scale_fill_manual(values = c("green", "grey", "blue", "red")) +
-  scale_color_manual(values = c("green", "grey", "blue", "red")) +
-   facet_grid(~Date)
+  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black"))
 ```
 ```{r}
   merged_data%>%
-  filter(between(Date, as.Date('2021-09-29'), as.Date ('2022-03-25')))%>%
+  filter(between(Date, as.Date('2023-06-19'), as.Date ('2023-06-29')))%>%
   ggplot(aes(x = Genotype, y = Response.time)) +
   geom_boxplot() +
   geom_point(aes(color = Genotype)) +
   labs(title = "30% oct avoidance in cest-2.1") +
-  scale_fill_manual(values = c("green", "grey", "blue", "red")) +
-  scale_color_manual(values = c("green", "grey", "blue", "red")) +
+  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red","purple", "orange","black")) +
    facet_grid(~Date)
 ```
 
 
 ```{r}
   merged_data%>%
-  filter(between(Date, as.Date('2022-04-05'), as.Date ('2022-10-13')))%>%
+  filter(between(Date, as.Date('2023-04-05'), as.Date ('2022-10-13')))%>%
   ggplot(aes(x = Genotype, y = Response.time)) +
   geom_boxplot() +
   geom_point(aes(color = Genotype)) +
   labs(title = "30% oct avoidance in cest-2.1") +
-  scale_fill_manual(values = c("green", "grey", "blue", "red")) +
-  scale_color_manual(values = c("green", "grey", "blue", "red")) +
+  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black")) +
    facet_grid(~Date)
 ```
 ```{r}
-  subset(merged_data, Date== "2023-02-02")%>%
+  subset(merged_data, Date== "2023-06-19")%>%
   ggplot(aes(x = Genotype, y = Response.time)) +
   geom_boxplot() +
   geom_point(aes(color = Genotype)) +
@@ -183,9 +182,34 @@ Plotting by Date Ranges
   scale_color_manual(values = c("green", "grey", "blue", "red"))
 ```
 
+Plotting by Date Ranges
+```{r}
+  merged_data%>%
+  filter(between(Date, as.Date('2023-06-19'), as.Date ('2023-06-29')))%>%
+  ggplot(aes(x = Genotype, y = Response.time)) +
+  geom_boxplot() +
+  geom_point(aes(color = Genotype)) +
+  scale_x_discrete(limits = c("N2","cest-2.1", "tbh-1", "glo-1", "ugt-64", "sqv-7")) + 
+  theme(legend.text = element_text(face = "italic")) +
+  theme(axis.text = element_text(face = "italic")) +
+  labs(title = "30% oct avoidance in cest-2.1 last 5 experiment days") +
+  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black"))
+```
 
-
-
+Plotting by Date Ranges
+```{r}
+  merged_data%>%
+  ggplot(aes(x = Genotype, y = Response.time)) +
+  geom_boxplot() +
+  geom_point(aes(color = Genotype)) +
+  scale_x_discrete(limits = c("N2","cest-2.1", "tbh-1", "glo-1", "ugt-64","trangenics", "sqv-7")) + 
+  theme(legend.text = element_text(face = "italic")) +
+  theme(axis.text = element_text(face = "italic")) +
+  labs(title = "30% oct avoidance in cest-2.1 last 5 experiment days") +
+  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black"))
+```
 
 
 
