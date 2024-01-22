@@ -70,23 +70,25 @@ merged_data %>%
 
 Plotting by Genotype Most Recent Experiment Day (6/29/2023)
 ```{R}
-subset(merged_data, Date== "2023-06-29")%>%
+subset(merged_data, Date== "2023-06-29, 2023-09-06, 2023-06-26")%>%
   ggplot(aes(x = Genotype, y = Response.time)) +
   geom_boxplot() +
   geom_point(aes(color = Genotype)) +
-  labs(title = "30% oct avoidance in cest-2.1") +
+  labs(title = "30% oct avoidance in with UDP candidate sqv-7") +
   scale_fill_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black")) +
   scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black"))
   
 ```
 
-Plotting by Experimenter Most Recent Experiment (05/24/2023)
+Plotting by Experimenter Most Recent Experiment (11/10/2023)
 ```{R}
-subset(merged_data, Date== "2023-06-")%>%
-  ggplot(aes(x = Experimenter, y = Response.time)) +
-  geom_boxplot(aes(fill = Genotype)) +
-  labs(title = "Via Experiementer") +
-  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black"))
+subset(merged_data, Date== "2023-11-13")%>%
+  ggplot(aes(x = Genotype , y = Response.time)) +
+  stat_summary(geom= "bar", fun= "mean", aes(fill = Genotype), width= 0.5) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+  labs(title = "4mM OA SOS with 30pct Octanol 40min") +
+  scale_fill_manual(values = c("grey", "blue"))
   
 ```
 
@@ -102,9 +104,34 @@ subset(merged_data, Date== "2023-06-19,2023-06-22,2023-06-23,2023-06-26,2023-06-
   scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black"))
   
 ```
+Plotting by N2, sqv7-, CEST-2.1 
+
+```{R}
+ data<-data.frame(subset(merged_data, Date %in% c("2023-06-29", "2023-09-06", "2023-06-26"))) 
+
+ ####### anova ####
+ lm(data = data, formula = Response.time ~ Genotype) %>%
+  summary()
+
+  ggplot(data, aes(x=Genotype, y= Response.time)) +
+  stat_summary(geom= "bar", fun= "mean", aes(fill = Genotype), width= 0.5) + 
+    scale_x_discrete(limits = c("N2","cest-2.1", "sqv-7")) +
+    
+     scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+    
+    scale_fill_manual(values = c("green", "grey", "blue")) +
+     stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+      theme(legend.text = element_text(face = "italic")) +
+  theme(axis.text = element_text(face = "italic")) +
+    theme(text = element_text(size=20)) +
+    labs(y= "Time(sec)")
+  
+ 
+```
 Plotting by N2, TBH, CEST-2.1 
 ```{R}
- data<-data.frame(subset(merged_data, Date== "2022-04-05,2022-05-10,2022-04-27")) 
+ data<-data.frame(subset(merged_data, Date== "2023-06-26,2023-06-29,2023-06-23,2023-05-24")) 
 
  ####### anova ####
  lm(data = data, formula = Response.time ~ Genotype) %>%
@@ -112,6 +139,7 @@ Plotting by N2, TBH, CEST-2.1
 
   ggplot(data, aes(x=Genotype, y= Response.time, width = 0.75)) +
   geom_bar(stat="summary", aes(fill = Genotype)) + 
+    scale_x_discrete(limits = c('N2', 'ugt-64 ', 'sqv-7')) +
     
      scale_y_continuous(expand = c(0,0)) +
   geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
@@ -120,9 +148,67 @@ Plotting by N2, TBH, CEST-2.1
   scale_color_manual(values = c("green", "grey", "blue")) +
      stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
  
-     labs(title = "cest-2.1 behavioral 30% SOS Phenotype")
+     labs(title = "30% octanol avoidance with N2, cest-2.1, and tbh-1")
+```
+
+
+```{R}
+ datas<-data.frame(subset(merged_data, Genotype == 'N2, cest-2.1, tbh-1'))
+
+  ggplot(data, aes(x=Genotype, y= Response.time, width = 0.75)) +
+  geom_bar(stat="summary", aes(fill = Genotype)) + 
+    
+     scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+    scale_x_discrete(limits = c("N2","cest-2.1", "tbh-1")) +
+    
+    scale_fill_manual(values = c("green", "grey", "red")) +
+  scale_color_manual(values = c("green", "grey", "red")) +
+     stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+    
+     theme(legend.text = element_text(face = "italic")) +
+  theme(axis.text = element_text(face = "italic")) +
+ 
+     labs(title = "30% octanol avoidance with N2, cest-2.1, and tbh-1")
   
  
+```
+
+```{R}
+#I made dome changes - the edited code are annotated
+library(tidyverse)
+data<-filter(merged_data, Genotype %in% c("N2", "cest-2.1", "tbh-1")) 
+ggplot(data, aes(x=Genotype, y= Response.time, width = 0.75)) +
+  geom_bar(stat="summary", aes(fill = Genotype)) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+  scale_x_discrete(limits = c('N2', 'cest-2.1', 'tbh-1')) +
+  scale_fill_manual(values = c("blue", "green", "red")) +
+  scale_color_manual(values = c("blue", "green", "red")) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  theme(legend.text = element_text(face = "italic")) +
+  theme(axis.text = element_text(face = "italic")) +
+  labs(title = "30% octanol avoidance with N2, cest-2.1, and tbh-1")
+  
+ 
+```
+
+Plotting by N2, TBH, CEST-2.1 
+```{R}
+ data<-data.frame(subset(merged_data, Date== "2023-06-26, 2023-06-29, 2023-06-23, 2023-05-24") + Genotype %in% c("N2", "ugt-64", "sqv-7")) 
+
+  ggplot(data, aes(x=Genotype, y= Response.time, width = 0.75)) +
+  geom_bar(stat="summary", aes(fill = Genotype)) + 
+    scale_x_discrete(limits = c("N2", "ugt-64" , "sqv-7")) +
+    
+     scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+    
+    scale_fill_manual(values = c("green", "grey", "blue")) +
+  scale_color_manual(values = c("green", "grey", "blue")) +
+     stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+ 
+     labs(title = "cest-2.1 Behavioral 30% Smell on Stick(SOS) Phenotype")
 ```
 
 mutate(genotype = fct_relevel(genotype, "N2")) 
@@ -140,13 +226,13 @@ merged_data %>%
 
 Plotting by Date Ranges
 ```{r}
-  subset(merged_data, Date== "2023-06-29")%>%
+  data<-data.frame(subset(merged_data, Date== "2023-09-06")) +
   ggplot(aes(x = Genotype, y = Response.time)) +
   geom_boxplot() +
   geom_point(aes(color = Genotype)) +
   labs(title = "30% oct avoidance in cest-2.1") +
-  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black")) +
-  scale_color_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black"))
+  scale_fill_manual(values = c("green", "grey", "purple")) +
+  scale_color_manual(values = c("green", "grey", "purple"))
 ```
 ```{r}
   merged_data%>%
@@ -211,5 +297,20 @@ Plotting by Date Ranges
   scale_color_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black"))
 ```
 
-
+```{R}
+#I made dome changes - the edited code are annotated
+library(tidyverse) 
+merged_data%>%
+ggplot(aes(x=Genotype, y= Response.time)) +
+  stat_summary(geom= "bar", fun= "mean", aes(fill = Genotype), width= 0.5) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+  scale_x_discrete(limits = c("N2","cest-2.1", "tbh-1", "glo-1", "ugt-64", "sqv-7")) +
+  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange")) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = 0.2) +
+  theme(legend.text = element_text(face = "italic")) +
+  theme(axis.text = element_text(face = "italic")) +
+  theme(text = element_text(size=20))+
+labs(y= "Time(sec)")
+```
 

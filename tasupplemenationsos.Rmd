@@ -1,0 +1,33 @@
+---
+title: "tasupplemenationsos"
+output: html_document
+date: "2024-01-22"
+---
+
+30pct Octanol Avoidance TA 4mM
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(ggtext)
+theme_set(theme_classic())
+files <- fs::dir_ls(recurse = TRUE, glob = "tasupplemenat*.csv")
+merged_data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+library(dplyr)
+
+```
+
+Plotting by Genotype
+```{R}
+merged_data %>%
+  ggplot(aes(x = Genotype, y = Response.time)) +
+  geom_boxplot() +
+  geom_point(aes(color = Genotype)) +
+  labs(title = "30% oct avoidance in cest-2.1 w/4mM ") +
+  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black"))
+  
+```
+
+
+

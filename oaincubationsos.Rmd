@@ -1,0 +1,53 @@
+---
+title: "4mM OA PRE-incubation"
+author: "TB"
+Date: "2023-2024"
+output: 
+  html_document:
+    code_folding: hide
+---
+
+30pct Octanol Avoidance Pre-exposure Assay
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(ggtext)
+theme_set(theme_classic())
+files <- fs::dir_ls(recurse = TRUE, glob = "oaincubation*.csv")
+merged_data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+library(dplyr)
+
+```
+
+Plotting by Genotype
+```{R}
+merged_data %>%
+  ggplot(aes(x = Genotype, y = Response.time)) +
+  geom_boxplot() +
+  geom_point(aes(color = Condition)) +
+  labs(title = "4mM OA PRE-incubation of N2, cest-2.1, and tbh-1 for 30% octanol avoidance") +
+  facet_grid(~Condition) +
+  scale_fill_manual(values = c("green", "grey", "blue")) +
+  scale_color_manual(values = c("green", "grey", "blue"))
+  
+```
+
+Plotting by Genotype and Condition
+```{R}
+merged_data%>%
+  ggplot(aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  labs(title = "4mM OA PRE-incubation of N2, cest-2.1, and tbh-1 for 30% octanol avoidance") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c("+ OA", "- OA")) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+  scale_fill_manual(values = c("blue","green", "red")) +
+  scale_color_manual(values = c("blue","green", "red"))
+```
+
+
+
+
