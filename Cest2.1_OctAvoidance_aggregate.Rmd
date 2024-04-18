@@ -82,13 +82,14 @@ subset(merged_data, Date== "2023-06-29, 2023-09-06, 2023-06-26")%>%
 
 Plotting by Experimenter Most Recent Experiment (11/10/2023)
 ```{R}
-subset(merged_data, Date== "2023-11-13")%>%
+data<-data.frame(subset(merged_data, Date %in% c("2023-11-10")))
   ggplot(aes(x = Genotype , y = Response.time)) +
   stat_summary(geom= "bar", fun= "mean", aes(fill = Genotype), width= 0.5) +
   scale_y_continuous(expand = c(0,0)) +
   geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
   labs(title = "4mM OA SOS with 30pct Octanol 40min") +
-  scale_fill_manual(values = c("grey", "blue"))
+  scale_fill_manual(values = c("green", "grey", "blue")) + 
+  scale_color_manual(values = c( "green", "grey", "blue"))
   
 ```
 
@@ -153,7 +154,8 @@ Plotting by N2, TBH, CEST-2.1
 
 
 ```{R}
- datas<-data.frame(subset(merged_data, Genotype == 'N2, cest-2.1, tbh-1'))
+ #data<-data.frame(subset(merged_data, Genotype == 'N2, cest-2.1, tbh-1'))
+data<-filter(merged_data, Genotype %in% c("N2", "cest-2.1", "tbh-1")) 
 
   ggplot(data, aes(x=Genotype, y= Response.time, width = 0.75)) +
   geom_bar(stat="summary", aes(fill = Genotype)) + 
@@ -180,7 +182,10 @@ library(tidyverse)
 data<-filter(merged_data, Genotype %in% c("N2", "cest-2.1", "tbh-1")) 
 ggplot(data, aes(x=Genotype, y= Response.time, width = 0.75)) +
   geom_bar(stat="summary", aes(fill = Genotype)) +
-  scale_y_continuous(expand = c(0,0)) +
+  #scale_y_continuous(expand = c(0,0)) +
+  ggbeeswarm::geom_quasirandom() +
+  geom_jitter() +
+  scale_y_log10() +
   geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
   scale_x_discrete(limits = c('N2', 'cest-2.1', 'tbh-1')) +
   scale_fill_manual(values = c("blue", "green", "red")) +
