@@ -27,9 +27,27 @@ merged_data %>%
   geom_boxplot() +
   geom_point(aes(color = Genotype)) +
   labs(title = "30% oct avoidance in cest-2.1") +
-  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black")) +
-  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black"))
+  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black","coral4","hotpink1","gold")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black","coral4","hotpink1","gold"))
   
+```
+
+```{r}
+merged_data %>%
+  ggplot(aes(x = Genotype, y = Response.time)) +
+  geom_point(aes(color = Genotype)) +
+  labs(title = "30% oct avoidance in cest-2.1") +
+  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black","coral4","hotpink1","gold")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black","coral4","hotpink1","gold")) +
+ 
+stat_summary(geom= "bar", fun= "mean", aes(fill = Genotype), width= 0.5) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=20, label="Stretch it"), vjust=-1) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = 0.2) +
+  theme(legend.text = element_text(face = "italic")) +
+  theme(axis.text = element_text(face = "italic")) +
+  theme(text = element_text(size=20))+
+labs(y= "Time(sec)")
 ```
 Plot by Date
 
@@ -39,8 +57,8 @@ merged_data %>%
   geom_boxplot() +
   geom_point(aes(color = Genotype)) +
   labs(title = "30% oct avoidance in cest-2.1") +
-  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple","orange", "black")) +
-  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black")) +
+  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black","coral4","hotpink1","gold")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black","coral4","hotpink1","gold")) +
   facet_grid(~Genotype)
 ```
 
@@ -52,8 +70,8 @@ merged_data %>%
   geom_boxplot() +
   geom_point(aes(color = Genotype)) +
   labs(title = "30% oct avoidance in cest-2.1") +
-  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black")) +
-  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black"))
+  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black","white","hotpink1","gold")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black","white","hotpink1","gold"))
   
 ```
 
@@ -65,7 +83,7 @@ merged_data %>%
   ggplot(aes(x = Experimenter, y = Response.time)) +
   geom_boxplot(aes(fill = Genotype)) +
   labs(title = "Via Experiementer") +
-  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black"))
+  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black","white","hotpink1","gold"))
 ```
 
 Plotting by Genotype Most Recent Experiment Day (6/29/2023)
@@ -155,23 +173,28 @@ Plotting by N2, TBH, CEST-2.1
 
 ```{R}
  #data<-data.frame(subset(merged_data, Genotype == 'N2, cest-2.1, tbh-1'))
-data<-filter(merged_data, Genotype %in% c("N2", "cest-2.1", "tbh-1")) 
 
-  ggplot(data, aes(x=Genotype, y= Response.time, width = 0.75)) +
-  geom_bar(stat="summary", aes(fill = Genotype)) + 
+data<-data.frame(subset(merged_data, Date== "2023-06-26, 2023-06-29, 2023-09-06")) 
+
+ data<-filter(data, Genotype %in% c("N2", "cest-2.1", "sqv-7")) 
+
+  ggplot(data, aes(x=Genotype, y= Response.time, width= 0.5)) +
+  geom_bar(stat="summary", aes(fill = Genotype)) +
+    geom_point(aes(color = Genotype)) +
     
+
      scale_y_continuous(expand = c(0,0)) +
-  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
-    scale_x_discrete(limits = c("N2","cest-2.1", "tbh-1")) +
+  geom_text(aes(x=1, y=20, label="Stretch it"), vjust=-1) +
+    scale_x_discrete(limits = c("N2","cest-2.1", "sqv-7")) +
     
     scale_fill_manual(values = c("green", "grey", "red")) +
   scale_color_manual(values = c("green", "grey", "red")) +
-     stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
-    
-     theme(legend.text = element_text(face = "italic")) +
+
+     stat_summary(geom = "errorbar", fun.data = "mean_se", width = 0.2) +
+  theme(legend.text = element_text(face = "italic")) +
   theme(axis.text = element_text(face = "italic")) +
- 
-     labs(title = "30% octanol avoidance with N2, cest-2.1, and tbh-1")
+  theme(text = element_text(size=12))+
+     labs(title = "30% octanol avoidance with all N2, cest-2.1, and sqv-7")
   
  
 ```
@@ -200,7 +223,8 @@ ggplot(data, aes(x=Genotype, y= Response.time, width = 0.75)) +
 
 Plotting by N2, TBH, CEST-2.1 
 ```{R}
- data<-data.frame(subset(merged_data, Date== "2023-06-26, 2023-06-29, 2023-06-23, 2023-05-24") + Genotype %in% c("N2", "ugt-64", "sqv-7")) 
+ data<-data.frame(subset(merged_data, Date== "2023-06-26, 2023-06-29, 2023-06-23, 2023-05-24") + 
+  Genotype %in% c("N2", "ugt-64", "sqv-7")) 
 
   ggplot(data, aes(x=Genotype, y= Response.time, width = 0.75)) +
   geom_bar(stat="summary", aes(fill = Genotype)) + 
@@ -264,13 +288,54 @@ Plotting by Date Ranges
    facet_grid(~Date)
 ```
 ```{r}
-  subset(merged_data, Date== "2023-06-19")%>%
+  subset(merged_data, Date== "2024-04-21")%>%
   ggplot(aes(x = Genotype, y = Response.time)) +
   geom_boxplot() +
   geom_point(aes(color = Genotype)) +
-  labs(title = "Dilute 30% octanol SOS on 2023-02-02") +
-  scale_fill_manual(values = c("green", "grey", "blue", "red")) +
-  scale_color_manual(values = c("green", "grey", "blue", "red"))
+  labs(title = "Dilute 30% octanol SOS on 2024-04-21") +
+  scale_fill_manual(values = c("green", "grey", "blue", "red","gold")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red","gold"))
+```
+```{r}
+  subset(merged_data, Date== "2024-04-21")%>%
+  ggplot(aes(x = Genotype, y = Response.time)) +
+  geom_boxplot() +
+  geom_point(aes(color = Genotype)) +
+  labs(title = "Dilute 30% octanol SOS on 2024-04-21") +
+  scale_fill_manual(values = c("green", "grey", "blue", "red","gold")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red","gold"))
+```
+```{r}
+library(tidyverse) 
+subset(merged_data, Date== "2024-04-21")%>%
+ggplot(aes(x=Genotype, y= Response.time)) +
+  geom_point(aes(color = Genotype)) +
+  stat_summary(geom = "bar", fun= "mean", aes(fill = Genotype), width= 0.5) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=20, label="Stretch it"), vjust=-1) +
+  scale_x_discrete(limits = c("N2","cest-2.1", "octr-1", "ser-3", "ser-6")) +
+  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange")) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = 0.2) +
+  theme(legend.text = element_text(face = "italic")) +
+  theme(axis.text = element_text(face = "italic")) +
+  theme(text = element_text(size=20))+
+labs(y= "Time(sec)")
+```
+```{r}
+library(tidyverse) 
+subset(merged_data, Date== "2024-04-21")%>%
+ggplot(aes(x=Genotype, y= Response.time)) +
+  geom_point(aes(color = Genotype)) +
+  stat_summary(fun.y = mean, geom = "bar") +
+  stat_summary(fun.data = mean_se, fun.args = list(mult = 1), geom = "errorbar", width = 0.2) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=20, label="Stretch it"), vjust=-1) +
+  scale_x_discrete(limits = c("N2","cest-2.1", "octr-1", "ser-3", "ser-6")) +
+  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange")) +
+  theme(legend.text = element_text(face = "italic")) +
+  theme(axis.text = element_text(face = "italic")) +
+  theme(text = element_text(size=20))+
+labs(y= "Time(sec)")
 ```
 
 Plotting by Date Ranges
@@ -298,8 +363,8 @@ Plotting by Date Ranges
   theme(legend.text = element_text(face = "italic")) +
   theme(axis.text = element_text(face = "italic")) +
   labs(title = "30% oct avoidance in cest-2.1 last 5 experiment days") +
-  scale_fill_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black")) +
-  scale_color_manual(values = c("green", "grey", "blue", "red","purple", "orange", "black"))
+  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black","white","hotpink1","gold")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black","white","hotpink1","gold"))
 ```
 
 ```{R}

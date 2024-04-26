@@ -124,11 +124,11 @@ subset(merged_data, Date== "2024-04-14, 2024-03-14, 2024-03-17")%>%
 
 
 ```{R}
-subset(merged_data, Date== "202")%>%
+subset(merged_data, Date== "2024-04-20")%>%
   ggplot(aes(x = Condition, y = Response.time)) +
   stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
   stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
-  labs(title = "4uM and 40uM OA Supplementation for N2, cest-2.1, and tbh-1 SOS Assay") +
+  labs(title = "40uM OA Supplementation for N2, cest-2.1, and tbh-1 SOS Assay") +
   facet_grid(~Genotype) +
   scale_x_discrete(labels = c("4mM", "C(40)","(C)","(40uM)")) +
   scale_y_continuous(expand = c(0,0)) +
