@@ -1,0 +1,96 @@
+---
+title: "trouble shotting"
+output: html_document
+date: "2023-08-15"
+---
+
+30pct Octanol Avoidance
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(ggtext)
+theme_set(theme_classic())
+files <- fs::dir_ls(recurse = TRUE, glob = "data/octanol_3*.csv")
+merged_data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+library(dplyr)
+
+```
+
+
+Plotting by N2, TBH, CEST-2.1 
+```{R}
+ data<-data.frame(subset(merged_data, Date %in% "2023-06-26, 2023-06-29, 2023-06-23, 2023-05-24") +
+                  Genotype %in% c("N2", "ugt-64", "sqv-7")) 
+
+  ggplot(data, aes(x=Genotype, y= Response.time, width = 0.75)) +
+  geom_bar(stat="summary", aes(fill = Genotype)) + 
+    scale_x_discrete(limits = c("N2", "ugt-64" , "sqv-7")) +
+    
+     scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+    
+    scale_fill_manual(values = c("green", "grey", "blue")) +
+  scale_color_manual(values = c("green", "grey", "blue")) +
+     stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+ 
+     labs(title = "cest-2.1 Behavioral 30% Smell on Stick(SOS) Phenotype")
+```
+
+Plotting by N2, TBH, CEST-2.1 
+```{R}
+ data<-data.frame(subset(merged_data, Date== "2023-06-26,2023-06-29,2023-06-23,2023-05-24")) 
+
+ ####### anova ####
+ lm(data = data, formula = Response.time ~ Genotype) %>%
+  summary()
+
+  ggplot(data, aes(x=Genotype, y= Response.time, width = 0.75)) +
+  geom_bar(stat="summary", aes(fill = Genotype)) + 
+    scale_x_discrete(limits = c('N2', 'ugt-64 ', 'sqv-7')) +
+    
+     scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+    
+    scale_fill_manual(values = c("green", "grey", "blue")) +
+  scale_color_manual(values = c("green", "grey", "blue")) +
+     stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+ 
+     labs(title = "cest-2.1 Behavioral 30% Smell on Stick(SOS) Phenotype")
+```
+
+```{R}
+#I made dome changes - the edited code are annotated
+library(tidyverse) # better for filtering subsetting than base R
+# datad<-data.frame(subset(merged_data, Genotype == 'N2, ugt-64, sqv-7')) you had datad instead of data
+data<-filter(merged_data, Genotype %in% c("N2", "cest-2.1", "sqv-7"))
+ggplot(data, aes(x=Genotype, y= Response.time)) +
+  stat_summary(geom= "bar", fun= "mean", aes(fill = Genotype), width= 0.5) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+  scale_x_discrete(limits = c('N2', 'cest-2.1', 'sqv-7')) +
+  scale_fill_manual(values = c("green", "grey", "purple")) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = 0.2) +
+  theme(legend.text = element_text(face = "italic")) +
+  theme(axis.text = element_text(face = "italic")) +
+  theme(text = element_text(size=20))+
+labs(y= "Time(sec)")
+```
+```{R}
+#I made dome changes - the edited code are annotated
+library(tidyverse)
+data<-filter(merged_data, Genotype %in% c("N2", "cest-2.1", "sqv-7")) 
+ggplot(data, aes(x=Genotype, y= Response.time, width = 0.75)) +
+  geom_bar(stat="summary", aes(fill = Genotype)) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+  scale_x_discrete(limits = c('N2', 'cest-2.1', 'sqv-7')) +
+  scale_fill_manual(values = c("green", "grey", "blue")) +
+  scale_color_manual(values = c("green", "grey", "blue")) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  theme(legend.text = element_text(face = "italic")) +
+  theme(axis.text = element_text(face = "italic")) +
+  labs(title = "cest-2.1 Behavioral 30% Smell on Stick(SOS) Phenotype")
+  
+ 
+```

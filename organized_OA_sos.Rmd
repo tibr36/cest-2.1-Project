@@ -1,0 +1,257 @@
+---
+title: "OA Incubation SOS"
+author: "TB"
+Date: "2023-2024"
+output: 
+  html_document:
+    code_folding: hide
+---
+
+30pct Octanol Avoidance Pre-exposure Assay
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(ggtext)
+theme_set(theme_classic())
+files <- fs::dir_ls(recurse = TRUE, glob = "data/oaincubationsos*.csv")
+merged_data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+library(dplyr)
+
+```
+
+Plotting via Genotype
+  All data
+```{R}
+merged_data %>%
+  ggplot(aes(x = Genotype, y = Response.time)) +
+  geom_boxplot() +
+  geom_point(aes(color = Condition)) +
+  labs(title = "Aggregate OA SOS of N2, cest-2.1, and tbh-1 for 30% octanol avoidance") +
+  facet_grid(~Condition) +
+  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple", "black", "orange", "yellow", "brown", "pink", "steelblue","gold", "forestgreen","white" )) +
+  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "black", "orange", "yellow", "brown", "pink", "steelblue","gold", "forestgreen", "white"))
+  
+```
+
+Plotting by Genotype and Condition
+  All data
+```{R}
+merged_data%>%
+  ggplot(aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = 0.2) +
+ # geom_point(aes(color = Genotype)) +
+  geom_point(color = "black", size = 1) +
+  labs(title = "Aggregate OA SOS of N2, cest-2.1, and tbh-1 for 30% octanol avoidance") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c("4mMOA", "4nMT", "C(sol)", "C", "CBac", "CT", "400nM", "400nMbac", "400nMT", "40uMBac", "40uMT", "4nM", "4nMBac")) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=20, label="Stretch it"), vjust=-1) +
+  scale_fill_manual(values = c("blue","green", "red")) +
+  scale_color_manual(values = c("blue","green", "red"))
+```
+
+
+Plotting by Condition
+```{R}
+  subset(merged_data, Condition %in% c("OA400nM", "C(sol)"))%>%
+  ggplot(aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = 0.2) +
+ # geom_point(aes(color = Genotype)) +
+  geom_point(color = "black", size = 1) +
+  #labs(title = "OA SOS N2, cest-2.1, and tbh-1 for 30% octanol avoidance") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c("OA400nM", "C(sol)")) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=20, label="Stretch it"), vjust=-1) +
+  scale_fill_manual(values = c("blue","green", "red")) +
+  scale_color_manual(values = c("blue","green", "red"))
+```
+
+Plotting by Condition and Date
+```{R}
+subset(merged_data, Date== "2024-01-30, 2024-03-02, 2023-11-13, 2023-11-10")%>%
+  ggplot(aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = 0.2) +
+ # geom_point(aes(color = Genotype)) +
+  geom_point(color = "black", size = 1) +
+  labs(title = "OA SOS N2, cest-2.1, and tbh-1 for 30% octanol avoidance") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c("4mMOA", "control")) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=20, label="Stretch it"), vjust=-1) +
+  scale_fill_manual(values = c("blue","green", "red")) +
+  scale_color_manual(values = c("blue","green", "red"))
+```
+
+
+```{R}
+filter_date <- c("2024-01-30, 2024-03-02, 2023-11-13, 2023-11-10")
+#filter_genotype <-c("OA400nM", "C(sol)")
+# Filter data based on criteria
+#filtered_data <- subset(data, Date >= as.Date(filter_date) & Genotype == filter_genotype)
+#subset(merged_data, Date >= as.Date(filter_date) & Genotype == filter_genotype)
+filter(merged_data, Date %in% filter_date, Condition %in% c("OA400nM", "C(sol)"))
+  ggplot(aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = 0.2) +
+ # geom_point(aes(color = Genotype)) +
+  geom_point(color = "black", size = 1) +
+  labs(title = "OA SOS N2, cest-2.1, and tbh-1 for 30% octanol avoidance") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c("4mMOA", "control")) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=20, label="Stretch it"), vjust=-1) +
+  scale_fill_manual(values = c("blue","green", "red")) +
+  scale_color_manual(values = c("blue","green", "red"))
+```
+
+```{R}
+
+library(ggplot2)
+library(dplyr)
+
+filter_date <- c("2024-03-17", "2024-03-14", "2024-03-11", "2024-03-02", "2024-04-14")
+
+# Assuming merged_data is your data frame
+filtered_data <- merged_data %>%
+  filter(Date %in% filter_date, Condition %in% c("OA4nM", "OA4nMBac","4nMT", "control", "controlT", "controlbac", "C(sol)"))
+
+ggplot(filtered_data, aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = mean_se, width = 0.2) +
+ geom_point(color = "black", size = 1) +
+  #labs(title = "OA SOS N2, cest-2.1, and tbh-1 for 30% octanol avoidance") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c( "C(sol)", "C", "CT", "OA4nM")) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=20, label="Stretch it"), vjust=-1) +
+  scale_fill_manual(values = c("blue","green", "red")) +
+  scale_color_manual(values = c("blue","green", "red"))
+```
+Plotting with Single Date and Conditions
+```{R}
+library(ggplot2)
+library(dplyr)
+
+filter_date <- c( "2024-04-14")
+
+# Assuming merged_data is your data frame
+filtered_data <- merged_data %>%
+  filter(Date %in% filter_date, Condition %in% c("control", "OA4nMBac"))
+
+ggplot(filtered_data, aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = mean_se, width = 0.2) +
+ geom_point(color = "black", size = 1) +
+  labs(title = "OA SOS with N2,  cest-2.1, and tbh-1 for 30% octanol avoidance") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c( "control", "OA4nMBac")) +
+  scale_y_continuous(expand = c(0, 0)) +
+  geom_text(aes(x = 1, y = 20, label = "Stretch it"), vjust = -1) +
+  scale_fill_manual(values = c("blue", "green", "red")) +
+  scale_color_manual(values = c("blue", "green", "red"))
+```
+
+Most Recent 40uM Assay
+```{R}
+
+library(ggplot2)
+library(dplyr)
+
+filter_date <- c("2024-05-06", "2024-04-30")
+
+# Filter Data to Date
+filtered_data <- merged_data %>%
+  filter(Date %in% filter_date, Condition %in% c("OA40uMT", "controlT"))
+
+# Reorder Genotype 
+filtered_data$Genotype <- factor(filtered_data$Genotype, levels = c("N2", "cest-2.1", "tbh-1"))
+
+#Plot/Make Graph
+ggplot(filtered_data, aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  geom_point(aes(fill = Genotype), color = "black", size = 1, alpha = 0.5, position = position_jitter(width = 0.2)) +
+  stat_summary(geom = "errorbar", fun.data = mean_se, width = 0.2) +
+  labs(title = "OA SOS with N2, cest-2.1, and tbh-1 for 30% octanol avoidance") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c("control", "OA4nMBac")) +
+  scale_y_continuous(expand = c(0, 0)) +
+  geom_text(aes(x = 1, y = 20, label = "Stretch it"), vjust = -1) +
+  scale_fill_manual(values = c("#999999", "#E69F00", "#D55E00")) +
+  scale_color_manual(values = c("#999999", "#E69F00", "#D55E00")) +
+  labs(y = "Time(sec)")
+
+
+```
+40uM TopSpread Figure
+
+```{R}
+
+#mutate(data,(col="somefunction/value"))
+#"some factor" fct_relevel(condition, "control")
+
+# Filter Data to Date + Condition/Genotype
+filter_date <- c("2024-05-06", "2024-04-30")
+filtered_data <- merged_data %>%
+  filter(Date %in% filter_date, Condition %in% c("OA40uMT", "controlT")) %>%
+  mutate(Genotype = fct_relevel(Genotype, "N2", "cest-2.1", "tbh-1"),
+         Condition = fct_relevel(Condition, "controlT"))
+
+# Specific Genotype Order
+filtered_data$Genotype <- factor(filtered_data$Genotype, levels = c("N2", "cest-2.1", "tbh-1"))
+
+#Plot/Make Graph
+ggplot(filtered_data, aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition == "controlT"), fun = "mean") +
+  labs(fill = "Genotype") +
+  ggbeeswarm::geom_quasirandom(width=0.25) +
+  stat_summary(geom = "errorbar", fun.data = mean_se, width = 0.2) +
+  labs(title = "OA SOS with N2, cest-2.1, and tbh-1 for 30% octanol avoidance") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c("controlT", "OA40uMT")) +
+  scale_y_continuous(expand = c(0, 0)) +
+ geom_text(aes(x = 1, y = 20, label = "Stretch it"), vjust = -1) +
+  scale_fill_manual(values = c("#999999", "#E69F00", "#D55E00")) +
+  scale_color_manual(values = c("#999999", "#E69F00", "#D55E00")) +
+  labs(y = "Time(sec)")
+
+```
+#Plotting OA SOS with N2, cest-2.1, and tbh-1
+
+
+
+4mM Figure
+```{R}
+plotColors <- source(file = 'parameters/plotColors.R')
+
+# Filter Data to Date
+filter_date <- c("2024-01-21", "2024-01-30", "2024-03-02")
+filtered_data <- merged_data %>%
+  filter(Date %in% filter_date, Condition %in% c("4mMOA", "control"))
+
+# Specific Genotype Order
+filtered_data$Genotype <- factor(filtered_data$Genotype, levels = c("N2", "cest-2.1", "tbh-1"))
+
+ggplot(filtered_data, aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), fun = "mean") +
+  labs(fill = "Genotype") +
+  geom_point(aes(fill = Genotype), color = "black", size = 1, alpha = 0.5, position = position_jitter(width = 0.2)) +
+  stat_summary(geom = "errorbar", fun.data = mean_se, width = 0.2) +
+  labs(title = "OA SOS with N2, cest-2.1, and tbh-1 for 30% octanol avoidance") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c( "4mMOA", "control")) +
+  scale_y_continuous(expand = c(0, 0)) +
+ geom_text(aes(x = 1, y = 20, label = "Stretch it"), vjust = -1) +
+  #scale_fill_manual(values = c("#999999", "#E69F00", "#D55E00")) +
+  scale_fill_manual(values = plotColors$value) +
+  scale_color_manual(values = c("#999999", "#E69F00", "#D55E00")) +
+  scale_alpha_manual(values = c(0.5, 1)) +
+  labs(y = "Time(sec)")
+
+```
+
+

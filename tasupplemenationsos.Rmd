@@ -1,0 +1,74 @@
+---
+title: "tasupplemenationsos"
+output: html_document
+date: "2024-01-22"
+---
+
+30pct Octanol Avoidance TA 4mM
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(ggtext)
+theme_set(theme_classic())
+files <- fs::dir_ls(recurse = TRUE, glob = "data/tasupplemenat*.csv")
+merged_data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+library(dplyr)
+
+```
+
+Plotting by Genotype
+```{R}
+merged_data %>%
+  ggplot(aes(x = Genotype, y = Response.time)) +
+  geom_boxplot() +
+  geom_point(aes(color = Genotype)) +
+  labs(title = "30% oct avoidance in cest-2.1 w/4mM ") +
+  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black")) +
+  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "orange", "black"))
+  
+```
+
+```{R}
+subset(merged_data, Date== "2024-03-02, 2023-12-09")%>%
+  ggplot(aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  labs(title = "4uM OA Supplementation for N2, cest-2.1, and tbh-1 SOS Assay") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c("-TA", "+TA")) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+  scale_fill_manual(values = c("green","gray", "blue")) +
+  scale_color_manual(values = c("green","gray", "blue"))
+```
+
+```{R}
+
+library(tidyverse)
+
+filter_date <- c("2024-03-02")  # Separate dates with a comma
+
+# Assuming merged_data is your data frame
+filtered_data <- merged_data %>%
+  filter(Date %in% filter_date, Condition %in% c("4mMTA", "control"))
+
+# Reorder levels in Condition variable
+filtered_data$Condition <- factor(filtered_data$Condition, levels = c("control", "4mMTA"))
+
+# Reorder levels in Genotype variable
+filtered_data$Genotype <- factor(filtered_data$Genotype, levels = c("N2", "cest-2.1", "tbh-1"))
+
+ggplot(filtered_data, aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = mean_se, width = 0.2) +
+  geom_point(color = "black", size = 1) +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c("control", "4mMTA")) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x = 1, y = 20, label = "Stretch it"), vjust = -1) +
+  scale_fill_manual(values = c("gray", "green", "red")) +
+  scale_color_manual(values = c("gray", "green", "red"))
+
+```
+

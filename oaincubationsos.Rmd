@@ -1,0 +1,168 @@
+---
+title: "4mM OA/TA PRE-incubation"
+author: "TB"
+Date: "2023-2024"
+output: 
+  html_document:
+    code_folding: hide
+---
+
+30pct Octanol Avoidance Pre-exposure Assay
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(ggtext)
+theme_set(theme_classic())
+files <- fs::dir_ls(recurse = TRUE, glob = "data/oaincubationsos*.csv")
+merged_data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
+library(dplyr)
+
+```
+
+Plotting by Genotype
+```{R}
+merged_data %>%
+  ggplot(aes(x = Genotype, y = Response.time)) +
+  geom_boxplot() +
+  geom_point(aes(color = Condition)) +
+  labs(title = "4mM OA PRE-incubation of N2, cest-2.1, and tbh-1 for 30% octanol avoidance") +
+  facet_grid(~Condition) +
+  scale_fill_manual(values = c("green", "grey", "blue", "red", "purple", "black", "orange", "yellow", "brown", "pink", "steelblue","gold", "forestgreen","white" )) +
+  scale_color_manual(values = c("green", "grey", "blue", "red", "purple", "black", "orange", "yellow", "brown", "pink", "steelblue","gold", "forestgreen", "white"))
+  
+```
+
+Plotting by Genotype and Condition
+```{R}
+merged_data%>%
+  ggplot(aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  labs(title = "4mM OA PRE-incubation of N2, cest-2.1, and tbh-1 for 30% octanol avoidance") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c("+ OA", "- OA")) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+  scale_fill_manual(values = c("blue","green", "red")) +
+  scale_color_manual(values = c("blue","green", "red"))
+```
+
+
+Plotting by Experiment Date
+```{R}
+subset(merged_data, Date== "2024-03-14")%>%
+  ggplot(aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  labs(title = "Bacteria OA Supplementation of tbh-1 for 30% SOS") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c("(C)", "(C Bac)", "400nM", "400nMBac", "40uM", "40uMBac")) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+  scale_fill_manual(values = c("blue","green", "red")) +
+  scale_color_manual(values = c("blue","green", "red"))
+```
+Plotting by Experiment Date
+```{R}
+subset(merged_data, Date== "2024-03-11")%>%
+  ggplot(aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  labs(title = "Top spread(T) OA at low[M] PRE-incubation of tbh-1 for 30% SOS") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c("+ 400nM", "+ 400nMT","(C)","(CT)", "40uM", "40uMT")) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+  scale_fill_manual(values = c("blue","green", "red")) +
+  scale_color_manual(values = c("blue","green", "red"))
+```
+Plotting by Experiment Date
+```{R}
+merged_data%>%
+  filter(between(Date, as.Date('2024-03-14'), as.Date ('2024-04-14')))%>%
+  ggplot(aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  labs(title = "OA PRE-incubation of N2, cest-2.1, and tbh-1 for 30% octanol avoidance Aggregate Bac data") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c("C", "Cbac", "400nM", "400nMBac", "40uM", "40uM Bac")) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+  scale_fill_manual(values = c("blue","green", "red")) +
+  scale_color_manual(values = c("blue","green", "red"))
+```
+
+Plotting Assays Together
+```{R}
+subset(merged_data, Date== "2024-01-21, 2024-01-30, 2024-03-02, 2023-11-13")%>%
+  ggplot(aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  labs(title = "4uM OA Supplementation for N2, cest-2.1, and tbh-1 SOS Assay") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c("+ OA", "-OA" )) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+  scale_fill_manual(values = c("blue","green", "red")) +
+  scale_color_manual(values = c("blue","green", "red"))
+```
+Plotting 40um and 400um Bac Together
+```{R}
+subset(merged_data, Date== "2024-04-14, 2024-03-14, 2024-03-17")%>%
+  ggplot(aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  labs(title = "40uM and 400nM OA Supplementation for N2, cest-2.1, and tbh-1 SOS Assay") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c("- OA", "400nM", "40uM" )) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+  scale_fill_manual(values = c("blue","green", "red")) +
+  scale_color_manual(values = c("blue","green", "red"))
+```
+
+
+```{R}
+subset(merged_data, Date== "2024-04-20")%>%
+  ggplot(aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  labs(title = "40uM OA Supplementation for N2, cest-2.1, and tbh-1 SOS Assay") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c("C(40)","(40uM)")) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+  scale_fill_manual(values = c("blue","green", "red")) +
+  scale_color_manual(values = c("blue","green", "red"))
+```
+
+Plotting Assays Together
+```{R}
+subset(merged_data, Date== "2023-11-13")%>%
+  ggplot(aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  labs(title = "4uM OA Supplementation for N2, cest-2.1, and tbh-1 SOS Assay") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c("+ OA", "-OA" )) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+  scale_fill_manual(values = c("blue","green", "red")) +
+  scale_color_manual(values = c("blue","green", "red"))
+```
+
+Plotting 3/17
+```{R}
+subset(merged_data, Date== "2024-03-14")%>%
+  ggplot(aes(x = Condition, y = Response.time)) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
+  labs(title = "40uMBac and 400nMBac OA Supplementation for N2, cest-2.1, and tbh-1 SOS Assay") +
+  facet_grid(~Genotype) +
+  scale_x_discrete(labels = c( "(400nM)","(40uM)", "C")) +
+  scale_y_continuous(expand = c(0,0)) +
+  geom_text(aes(x=1, y=12, label="Stretch it"), vjust=-1) +
+  scale_fill_manual(values = c("blue","green", "red")) +
+  scale_color_manual(values = c("blue","green", "red"))
+```
