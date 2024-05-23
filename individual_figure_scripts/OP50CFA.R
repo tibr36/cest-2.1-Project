@@ -12,7 +12,7 @@ merged_data <- files %>% purrr::map_df(., readr::read_csv, .id = "filename")
 plotColors <- source(file = 'parameters/plotColors.R')
 
 
-#filter_date <- c("2024-05-21")
+filter_date <- c("2024-05-21")
        
 filtered_data <- merged_data %>%
   filter(Date %in% filter_date, Bacteria %in% c("OP50", "CFA_KO")) %>%
