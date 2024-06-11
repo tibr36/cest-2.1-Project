@@ -21,7 +21,7 @@ lm(data = data, formula = Response.time ~ Genotype*Condition) %>%
 ###### plot (9/14 Experiment) #####
   data%>%
   ggplot(aes(x = Condition, y = Response.time)) +
-  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.75) +
+  stat_summary(geom = "bar", aes(fill = Genotype, alpha = Condition), width = 0.40) +
   stat_summary(geom = "errorbar", fun.data = "mean_se", width = .2) +
   labs(title = "100% octanol avoidance with N2 and cest-2.1 on OP50 vs Providencia") +
   facet_grid(~Genotype) +

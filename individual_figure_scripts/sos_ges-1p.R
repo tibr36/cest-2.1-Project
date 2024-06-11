@@ -20,17 +20,7 @@ filtered_data <- merged_data %>%
 # Reorder Genotype 
 filtered_data$Genotype <- factor(filtered_data$Genotype, levels = c("N2", "cest-2.1", "TIBR1", "TIBR2"))
 
-ggplot(filtered_data, aes(x = Genotype, y = Response.time)) +
-  stat_summary(geom = "bar", aes(fill = Genotype), width= 0.5) +
-  labs(fill = "Genotype") +
-  ggbeeswarm::geom_quasirandom(alpha = 0.5, width=0.2) +
-  stat_summary(geom = "errorbar", fun.data = mean_se, width = 0.2) +
-  #labs(title = "OA SOS with N2, cest-2.1, and tbh-1 for 30% octanol avoidance") +
-  scale_y_continuous(expand = c(0, 0)) +
-  geom_text(aes(x = 1, y = 20, label = "Stretch it"), vjust = -1) +
-  scale_fill_manual(values = genotype_colors) +
-  scale_color_manual(values = genotype_colors) + 
-  theme(legend.text = element_text(face = "italic")) +
-  theme(axis.text = element_text(face = "italic")) +
-  theme(text = element_text(size = 10)) +
-  labs(y = "Time(sec)")
+
+plotbar <- source(file = 'parameters/plotbar.R')
+
+print(plotbar$value) 

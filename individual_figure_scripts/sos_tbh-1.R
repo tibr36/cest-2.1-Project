@@ -23,4 +23,3 @@ filtered_data$Genotype <- factor(filtered_data$Genotype, levels = c("N2", "cest-
 
 plotbar <- source(file = 'parameters/plotbar.R')
 
-print(plotbar$value) 

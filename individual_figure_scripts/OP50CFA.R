@@ -22,7 +22,7 @@ filtered_data <- merged_data %>%
 filtered_data$Genotype <- factor(filtered_data$Genotype, levels = c("N2", "fcmt-1"))
        
        ggplot(filtered_data, aes(x = Bacteria, y = Response.time)) +
-         stat_summary(geom = "bar", aes(fill = Genotype, alpha = Bacteria), fun = "mean") +
+         stat_summary(geom = "bar", aes(fill = Genotype, alpha = Bacteria), width = 0.45, fun = "mean") +
          labs(fill = "Genotype") +
          ggbeeswarm::geom_quasirandom(alpha = 0.5, width=0.2) +
          stat_summary(geom = "errorbar", fun.data = mean_se, width = 0.2) +
@@ -40,8 +40,3 @@ filtered_data$Genotype <- factor(filtered_data$Genotype, levels = c("N2", "fcmt-
        
        
        
-       filter_date <- c("2024-05-21")
-       filtered_data <- merged_data %>%
-         filter(Date %in% filter_date, Bacteria %in% c("OP50", "CFA_KO")) %>%
-         filter(Date %in% filter_date, Genotype %in% c("N2", "fcmt-1"))
-       mutate(Genotype = fct_relevel(Genotype, "N2", "fcmt-1") 
