@@ -17,11 +17,11 @@ plotColors <- source(file = 'parameters/plotColors.R')
 
 
 # Filter Data to Date
-filter_date <- c("2024-05-06", "2024-04-30", "2024-05-14", "2024-04-20")
+filter_date <- c("2024-05-06", "2024-04-30", "2024-05-14", "2024-08-17")
 filtered_data <- merged_data %>%
   filter(Date %in% filter_date,
          Condition %in% c("OA", "control"),
-         Method %in% c("T",  "Bac", "control"),
+         Method %in% c( "T", "control"),
          Concentration %in% c("40uM", "control"),
          Genotype %in% c("N2", "cest-2.1", "tbh-1")) %>%
   mutate(Genotype = fct_relevel(Genotype, "N2", "cest-2.1", "tbh-1"))
@@ -46,3 +46,5 @@ ggplot(filtered_data, aes(x = Condition, y = Response.time)) +
   scale_color_manual(values = plotColors$value) +
   scale_alpha_manual(values = c("OA" = 0.25, "control" = 1)) +
   labs(y = "Time(sec)")
+
+#
