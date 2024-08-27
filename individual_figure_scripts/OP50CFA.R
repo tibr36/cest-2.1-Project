@@ -21,7 +21,7 @@ filtered_data <- merged_data %>%
 
 filtered_data$Genotype <- factor(filtered_data$Genotype, levels = c("N2", "fcmt-1"))
        
-       ggplot(filtered_data, aes(x = Bacteria, y = Response.time)) +
+       FCMT<-ggplot(filtered_data, aes(x = Bacteria, y = Response.time)) +
          stat_summary(geom = "bar", aes(fill = Genotype, alpha = Bacteria), width = 0.45, fun = "mean") +
          labs(fill = "Genotype") +
          ggbeeswarm::geom_quasirandom(alpha = 0.5, width=0.2) +
@@ -39,4 +39,11 @@ filtered_data$Genotype <- factor(filtered_data$Genotype, levels = c("N2", "fcmt-
          labs(y = "Time(sec)")
        
        
+       # Save the plot as a PDF file
+       pdf(file = "/Users/tiabrown/Documents/git/cest-2.1-Project/figures/fcmt-1-CFA_KO.pdf", width = 8, height = 6)
        
+       # Print graph
+       print(FCMT)
+       
+       # Step 3: Close the graphics device to save the file
+       dev.off()

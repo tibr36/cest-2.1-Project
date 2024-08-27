@@ -24,7 +24,7 @@ filtered_data <- merged_data %>%
   #filter(Date %in% filter_date, Genotype %in% c("N2", "cest-2.1", "cest-1.2", "glo-1", "cat-1"))
 # Reorder Genotype 
 
-filtered_data$Genotype <- factor(filtered_data$Genotype, levels = c("N2", "cest-2.1", "cest-1.2", "glo-1", "cat-1")) 
+filtered_data$Genotype <- factor(filtered_data$Genotype, levels = c("N2", "cest-2.1", "cest-1.2", "glo-1")) 
 
 plotbar <- source(file = 'parameters/plotbar.R')
 
